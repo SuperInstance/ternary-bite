@@ -1,74 +1,65 @@
 # ternary-bite
 
-**The beautiful destruction of resolution. Bit crushing, wavefolding, and the art of sounding worse on purpose.**
+**Bite for ternary systems — `crush`, `quantize`, `downsample`, `bit_rotate`**
 
-In a world of 24-bit, 96kHz pristine audio, there's a peculiar beauty in *destroying* resolution. Bit crushing takes a detailed signal and smashes it into fewer levels. Downsampling stretches time until you can hear the individual steps. Wavefolding folds energy back on itself instead of clipping — creating harmonics that weren't there, harmonics that *shouldn't* be there, harmonics that sound like a monster waking up.
+[![ternary](https://img.shields.io/badge/ecosystem-ternary-blue)](https://github.com/orgs/SuperInstance/repositories?q=ternary)
+[![tests](https://img.shields.io/badge/tests-16-green)]()
 
-This crate is the sound of digital decay. It's why old video games sounded like nothing else. It's why producers pay good money for plugins that make their tracks sound *worse*. Because "worse" is character. "Worse" is texture. "Worse" is the difference between a clean recording and something that *moves* you.
+### Key Functions
 
-In ternary, bit crushing means collapsing to {-1, 0, +1} — which is already the lowest possible resolution. So what does "destroying" a ternary signal even mean? It means *downsampling in time* (fewer samples per cycle, more staircase), *wavefolding* (folding values back when they exceed bounds), and *rotate/crush* transforms that mangle the signal's shape in ways that sound like broken machines singing.
+- `crush()`
+- `quantize()`
+- `downsample()`
+- `bit_rotate()`
+- `fold()`
 
-## What's Inside
+## Why Ternary?
 
-- **`crush(signal, levels)`** — reduce to fewer quantization levels. At 3 levels, you get pure ternary. At 2, binary. At 1, silence
-- **`downsample(signal, factor)`** — hold each value for N ticks. The sound of sample-rate reduction — that classic "digitization" artifact
-- **`wavefold(signal, threshold)`** — instead of hard clipping, fold the signal back. Energy creates new harmonics. Louder = more complex = more interesting
-- **`rotate(signal, amount)`** — cyclically rotate the ternary values. -1→0→+1→-1. Z₃ as an audio effect
-- **`rectify(signal)`** — flip negative values positive. Harmonics double. The sound gets brighter and more aggressive
-- **`saturate(signal, drive)`** — soft saturation that pushes values toward ±1. Warmth through distortion
+The balanced ternary system {-1, 0, +1} (also known as Z₃) is the mathematically optimal discrete encoding:
+- **More expressive than binary**: three states capture positive, neutral, and negative
+- **Natural for decisions**: accept/reject/abstain, buy/hold/sell, agree/disagree/neutral
+- **Self-balancing**: the 0 state acts as a universal screen, preventing pathological lock-in
+- **Z₃ cyclic dynamics**: rock-paper-scissors is the only natural coordination mechanism
 
-## Quick Example
+## Stats
 
-```rust
-use ternary_bite::*;
+| Metric | Value |
+|--------|-------|
+| Lines of Rust | 210 |
+| Test count | 16 |
+| Public types | 0 |
+| Public functions | 5 |
 
-let clean = vec![1, 0, -1, 0, 1, 0, -1, 0];
+## Ecosystem
 
-// Downsample: hold each value for 2 ticks
-let chunky = downsample(&clean, 2);
-// [1, 1, 0, 0, -1, -1, 0, 0] — staircase artifacts
+This crate is part of the **[SuperInstance Ternary Fleet](https://github.com/orgs/SuperInstance/repositories?q=ternary)**:
 
-// Wavefold at threshold 0.5
-let folded = wavefold(&clean, 0.5);
-// Values that exceed 0.5 fold back — new harmonics emerge
+- **[ternary-core](https://github.com/SuperInstance/ternary-core)** — shared traits and Z₃ arithmetic
+- **[ternary-grid](https://github.com/SuperInstance/ternary-grid)** — spatial grid with {-1, 0, +1} cells
+- **[ternary-graph](https://github.com/SuperInstance/ternary-graph)** — ternary-weighted graph algorithms
+- **[ternary-automata](https://github.com/SuperInstance/ternary-automata)** — three-state cellular automata
+- **[ternary-compiler](https://github.com/SuperInstance/ternary-compiler)** — expression compiler and optimizer
 
-// Rotate the signal through Z₃
-let rotated = rotate(&clean, 1);
-// Every value shifts: 1→-1, 0→1, -1→0. Same rhythm, different pitch.
+200+ crates. 4,300+ tests. One pattern.
 
-// Saturate: push toward the extremes
-let hot = saturate(&clean, 2.0);
-// The quiet parts get louder. The loud parts hit the ceiling.
+## Research Context
+
+The ternary approach connects to several active research areas:
+- **Ternary Neural Networks** (TNNs): weights constrained to {-1, 0, +1} for efficient inference
+- **Huawei's ternary chip**: 7nm ternary silicon with 60% less power consumption
+- **Active inference**: free energy minimization naturally maps to ternary action selection
+- **Cyclic dominance**: RPS dynamics maintain biodiversity in spatial ecology
+- **Z₃ group theory**: the only algebraic group on three elements is cyclic addition mod 3
+
+## Usage
+
+```toml
+[dependencies]
+ternary-bite = "0.1.0"
 ```
 
-## The Deeper Truth
-
-**Destruction is a creative act.** Every audio effect that producers love — distortion, saturation, bitcrushing, waveshaping — is fundamentally about *removing information*. You start with a clean, detailed signal and you *destroy* parts of it. The parts that survive become more important. The artifacts of destruction become the character.
-
-In ternary, the signal is already at minimum information — three levels. So "bit crushing" can't reduce the bit depth further. Instead, ternary destruction operates in *time* (downsampling) and *shape* (wavefolding, rotation). The constraint forces creativity: when you can't just "add more bits," you have to find new ways to mangle what you have.
-
-Wavefolding is the star. In continuous audio, wavefolding creates harmonic series that get richer the harder you push. In ternary, wavefolding creates *patterns* — the folding operation maps the three states onto themselves in non-obvious ways, producing rhythmic and harmonic structures that are impossible to get from any other process. It's controlled chaos: deterministic destruction with emergent beauty.
-
-**Use cases:**
-- **Lo-fi production** — the authentic sound of digital degradation
-- **Sound design** — generate textures that are impossible with continuous processing
-- **Game audio** — retro, chiptune, and "broken machine" aesthetics
-- **Live performance** — mangle signals in real-time with Z₃ rotation
-- **Education** — hear what sample rate and bit depth actually *mean*
-
-## See Also
-
-- **ternary-wave** — the clean signals you're destroying
-- **ternary-echo** — echo + bite = dub techno heaven
-- **ternary-gate** — gating after crushing creates rhythmic stutter effects
-- **ternary-sampler** — sample and destroy
-- **ternary-rack** — wire bite effects into a modular signal chain
-- **ternary-needledrop** — a different kind of degradation (vinyl warmth, not digital cold)
-
-## Install
-
-```bash
-cargo add ternary-bite
+```rust
+use ternary_bite;
 ```
 
 ## License
